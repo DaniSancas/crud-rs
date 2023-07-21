@@ -1,2 +1,2 @@
-pub mod article_controller;
+pub mod api;
 pub mod fake_article_repository;
