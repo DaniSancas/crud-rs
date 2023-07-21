@@ -33,6 +33,10 @@ command = ["cargo", "test", "--color", "always"]
 need_stdout = true
 watch = ["tests"]
 
+[jobs.format]
+command = ["cargo", "fmt"]
+need_stdout = false
+
 [jobs.doc]
 command = ["cargo", "doc", "--color", "always", "--no-deps"]
 need_stdout = false
@@ -64,3 +68,4 @@ d = "job:doc-open"
 t = "job:test"
 r = "job:run"
 v = "job:clippy-verbose"
+f = "job:format"
