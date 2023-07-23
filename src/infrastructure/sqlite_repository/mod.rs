@@ -12,7 +12,7 @@ impl SQLiteRepository {
             .connect(db_path)
             .await?;
 
-        Ok(SQLiteRepository {
+        Ok(Self {
             connection_pool: pool,
         })
     }

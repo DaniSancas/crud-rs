@@ -29,7 +29,7 @@ impl Api {
         let article_repository = SqliteArticleRepository::new(data.0.clone());
         let article_use_case = ArticleUseCase::new(article_repository);
 
-        match article_use_case.get(id.0).await {
+        match article_use_case.get_article(id.0).await {
             Ok(article) => ArticleResponse::Ok(Json(article)),
             Err(_) => ArticleResponse::NotFound,
         }

@@ -8,11 +8,11 @@ pub struct ArticleUseCase<T: ArticleRepository> {
 }
 
 impl<T: ArticleRepository> ArticleUseCase<T> {
-    pub fn new(article_repository: T) -> Self {
-        ArticleUseCase { article_repository }
+    pub const fn new(article_repository: T) -> Self {
+        Self { article_repository }
     }
 
-    pub async fn get(&self, id: i64) -> Result<Article> {
-        self.article_repository.get(id).await
+    pub async fn get_article(&self, id: i64) -> Result<Article> {
+        self.article_repository.get_article(id).await
     }
 }

@@ -4,5 +4,5 @@ use eyre::Result;
 
 #[async_trait]
 pub trait ArticleRepository {
-    async fn get(&self, id: i64) -> Result<Article>;
+    async fn get_article(&self, id: i64) -> Result<Article>;
 }
