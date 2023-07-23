@@ -4,6 +4,7 @@ use crate::infrastructure::sqlite_repository::sqlite_article_repository::SqliteA
 
 use poem::web::Data;
 use poem_openapi::ApiResponse;
+use poem_openapi::payload::PlainText;
 use poem_openapi::{payload::Json, OpenApi};
 
 use poem_openapi::param::Path;
@@ -12,26 +13,26 @@ use sqlx::SqlitePool;
 use super::Api;
 
 #[derive(ApiResponse)]
-enum ArticleResponse {
+enum GetArticleResponse {
     /// Returns when the article exists.
     #[oai(status = 200)]
     Ok(Json<Article>),
     /// Returns when the article doesn't exist.
     #[oai(status = 404)]
-    NotFound,
+    NotFound(PlainText<String>),
 }
 
 #[OpenApi]
 impl Api {
     /// GET Article
     #[oai(path = "/article/:id", method = "get")]
-    async fn get_article(&self, id: Path<i64>, data: Data<&SqlitePool>) -> ArticleResponse {
+    async fn get_article(&self, id: Path<i64>, data: Data<&SqlitePool>) -> GetArticleResponse {
         let article_repository = SqliteArticleRepository::new(data.0.clone());
         let article_use_case = ArticleUseCase::new(article_repository);
 
         match article_use_case.get_article(id.0).await {
-            Ok(article) => ArticleResponse::Ok(Json(article)),
-            Err(_) => ArticleResponse::NotFound,
+            Ok(article) => GetArticleResponse::Ok(Json(article)),
+            Err(err) => GetArticleResponse::NotFound(PlainText(err.to_string())),
         }
     }
 }
