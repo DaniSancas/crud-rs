@@ -10,3 +10,6 @@ poem = "1.2"
 poem-openapi = { version = "1.2", features = ["swagger-ui"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 eyre = "0.6"
+sqlx = { version = "0.7", features = [ "runtime-tokio", "sqlite", "migrate" ] }
+async-trait = "0.1.72"
+dotenv = "0.15.0"

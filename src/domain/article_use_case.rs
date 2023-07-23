@@ -12,7 +12,7 @@ impl<T: ArticleRepository> ArticleUseCase<T> {
         ArticleUseCase { article_repository }
     }
 
-    pub fn get(&self, id: i32) -> Result<Article> {
-        self.article_repository.get(id)
+    pub async fn get(&self, id: i64) -> Result<Article> {
+        self.article_repository.get(id).await
     }
 }

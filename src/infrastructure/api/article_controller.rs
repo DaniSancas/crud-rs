@@ -1,11 +1,13 @@
 use crate::domain::article::Article;
 use crate::domain::article_use_case::ArticleUseCase;
-use crate::infrastructure::fake_article_repository::FakeArticleRepository;
+use crate::infrastructure::sqlite_repository::sqlite_article_repository::SqliteArticleRepository;
 
+use poem::web::Data;
 use poem_openapi::ApiResponse;
 use poem_openapi::{payload::Json, OpenApi};
 
 use poem_openapi::param::Path;
+use sqlx::SqlitePool;
 
 use super::Api;
 
@@ -23,11 +25,11 @@ enum ArticleResponse {
 impl Api {
     /// GET Article
     #[oai(path = "/article/:id", method = "get")]
-    async fn get_article(&self, id: Path<i32>) -> ArticleResponse {
-        let fake_article_repository = FakeArticleRepository;
-        let article_use_case = ArticleUseCase::new(fake_article_repository);
+    async fn get_article(&self, id: Path<i64>, data: Data<&SqlitePool>) -> ArticleResponse {
+        let article_repository = SqliteArticleRepository::new(data.0.clone());
+        let article_use_case = ArticleUseCase::new(article_repository);
 
-        match article_use_case.get(id.0) {
+        match article_use_case.get(id.0).await {
             Ok(article) => ArticleResponse::Ok(Json(article)),
             Err(_) => ArticleResponse::NotFound,
         }
