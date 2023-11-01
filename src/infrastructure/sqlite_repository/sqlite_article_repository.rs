@@ -1,4 +1,7 @@
-use crate::{application::article_repository::ArticleRepository, domain::article::{Article, ArticleId}};
+use crate::{
+    application::article_repository::ArticleRepository,
+    domain::article::{Article, ArticleId},
+};
 use sqlx::SqlitePool;
 
 use async_trait::async_trait;
