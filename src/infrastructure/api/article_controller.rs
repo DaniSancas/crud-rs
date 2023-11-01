@@ -47,7 +47,7 @@ impl Api {
         id: Path<ArticleId>,
         data: Data<&SqlitePool>,
     ) -> GetArticleResponse {
-        let article_repository = SqliteArticleRepository::new(data.0.clone());
+        let article_repository = SqliteArticleRepository(data.0.clone());
         let article_use_case = ArticleUseCase::new(article_repository);
 
         match article_use_case.get_article(id.0).await {
@@ -63,7 +63,7 @@ impl Api {
         article: Json<Article>,
         data: Data<&SqlitePool>,
     ) -> CreateArticleResponse {
-        let article_repository = SqliteArticleRepository::new(data.0.clone());
+        let article_repository = SqliteArticleRepository(data.0.clone());
         let article_use_case = ArticleUseCase::new(article_repository);
 
         match article_use_case.create_article(article.0).await {

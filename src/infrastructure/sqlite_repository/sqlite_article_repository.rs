@@ -7,15 +7,7 @@ use sqlx::SqlitePool;
 use async_trait::async_trait;
 use eyre::Result;
 
-pub struct SqliteArticleRepository {
-    connection_pool: SqlitePool,
-}
-
-impl SqliteArticleRepository {
-    pub const fn new(connection_pool: SqlitePool) -> Self {
-        Self { connection_pool }
-    }
-}
+pub struct SqliteArticleRepository(pub SqlitePool);
 
 #[async_trait]
 impl ArticleRepository for SqliteArticleRepository {
@@ -25,7 +17,7 @@ impl ArticleRepository for SqliteArticleRepository {
             "select id, title, content from articles where id = ?",
             id
         )
-        .fetch_one(&self.connection_pool)
+        .fetch_one(&self.0)
         .await?)
     }
 
@@ -35,7 +27,7 @@ impl ArticleRepository for SqliteArticleRepository {
             article.title,
             article.content
         )
-        .execute(&self.connection_pool)
+        .execute(&self.0)
         .await?
         .last_insert_rowid())
     }
